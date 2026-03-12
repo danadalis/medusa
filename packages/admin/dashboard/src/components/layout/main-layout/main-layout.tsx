@@ -1,6 +1,7 @@
 import {
   BuildingStorefront,
   Buildings,
+  ChartBar,
   ChevronDownMini,
   CogSixTooth,
   CurrencyDollar,
@@ -181,6 +182,11 @@ const useCoreRoutes = (): Omit<INavItem, "pathname">[] => {
   const { t } = useTranslation()
 
   return [
+    {
+      icon: <ChartBar />,
+      label: "Dashboard",
+      to: "/dashboard",
+    },
     {
       icon: <ShoppingCart />,
       label: t("orders.domain"),
