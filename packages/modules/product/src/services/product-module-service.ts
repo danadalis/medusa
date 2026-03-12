@@ -11,12 +11,15 @@ import {
   ProductTypes,
 } from "@medusajs/framework/types"
 import {
+  Brand,
   Product,
   ProductCategory,
   ProductCollection,
   ProductImage,
+  ProductIntentTag,
   ProductOption,
   ProductOptionValue,
+  ProductSpecification,
   ProductTag,
   ProductType,
   ProductVariant,
@@ -80,6 +83,9 @@ type InjectedDependencies = {
 
 export default class ProductModuleService
   extends MedusaService<{
+    Brand: {
+      dto: any
+    }
     Product: {
       dto: ProductTypes.ProductDTO
     }
@@ -89,11 +95,17 @@ export default class ProductModuleService
     ProductCollection: {
       dto: ProductTypes.ProductCollectionDTO
     }
+    ProductIntentTag: {
+      dto: any
+    }
     ProductOption: {
       dto: ProductTypes.ProductOptionDTO
     }
     ProductOptionValue: {
       dto: ProductTypes.ProductOptionValueDTO
+    }
+    ProductSpecification: {
+      dto: any
     }
     ProductTag: {
       dto: ProductTypes.ProductTagDTO
@@ -108,11 +120,14 @@ export default class ProductModuleService
       dto: ProductTypes.ProductImageDTO
     }
   }>({
+    Brand,
     Product,
     ProductCategory,
     ProductCollection,
+    ProductIntentTag,
     ProductOption,
     ProductOptionValue,
+    ProductSpecification,
     ProductTag,
     ProductType,
     ProductVariant,

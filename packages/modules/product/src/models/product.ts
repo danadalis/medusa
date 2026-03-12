@@ -1,9 +1,12 @@
 import { model, ProductUtils } from "@medusajs/framework/utils"
 
+import Brand from "./brand"
 import ProductCategory from "./product-category"
 import ProductCollection from "./product-collection"
 import ProductImage from "./product-image"
+import ProductIntentTag from "./product-intent-tag"
 import ProductOption from "./product-option"
+import ProductSpecification from "./product-specification"
 import ProductTag from "./product-tag"
 import ProductType from "./product-type"
 import ProductVariant from "./product-variant"
@@ -31,6 +34,22 @@ const Product = model
     discountable: model.boolean().default(true),
     external_id: model.text().nullable(),
     metadata: model.json().nullable(),
+    brand: model
+      .belongsTo(() => Brand, {
+        mappedBy: "products",
+      })
+      .nullable(),
+    part_type: model.text().nullable(),
+    use_case: model.text().nullable(),
+    skill_level: model.text().nullable(),
+    assembly_context: model.text().nullable(),
+    vehicle_ref_search: model.text().searchable().nullable(),
+    specifications: model.hasMany(() => ProductSpecification, {
+      mappedBy: "product",
+    }),
+    intent_tags: model.hasMany(() => ProductIntentTag, {
+      mappedBy: "product",
+    }),
     variants: model.hasMany(() => ProductVariant, {
       mappedBy: "product",
     }),
@@ -60,7 +79,7 @@ const Product = model
     }),
   })
   .cascades({
-    delete: ["variants", "options", "images"],
+    delete: ["variants", "options", "images", "specifications", "intent_tags"],
   })
   .indexes([
     {
@@ -72,6 +91,18 @@ const Product = model
     {
       name: "IDX_product_type_id",
       on: ["type_id"],
+      unique: false,
+      where: "deleted_at IS NULL",
+    },
+    {
+      name: "IDX_product_brand_id",
+      on: ["brand_id"],
+      unique: false,
+      where: "deleted_at IS NULL",
+    },
+    {
+      name: "IDX_product_part_type",
+      on: ["part_type"],
       unique: false,
       where: "deleted_at IS NULL",
     },
