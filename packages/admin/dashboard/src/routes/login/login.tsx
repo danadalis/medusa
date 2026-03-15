@@ -149,6 +149,12 @@ export const Login = () => {
               <Button className="w-full" type="submit" isLoading={isPending}>
                 {t("actions.continueWithEmail")}
               </Button>
+              <a
+                href="/dev-login"
+                className="txt-small mt-2 block text-center font-medium text-ui-fg-interactive transition-fg hover:text-ui-fg-interactive-hover"
+              >
+                Developer – Login
+              </a>
             </form>
           </Form>
           {[...getWidgets("login.after"), CloudAuthLogin].map(

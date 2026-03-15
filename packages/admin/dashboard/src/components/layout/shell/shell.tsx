@@ -90,37 +90,45 @@ const Gutter = ({ children }: PropsWithChildren) => {
   )
 }
 
+type BreadcrumbItem = { label: string | ReactNode; path: string }
+
+type BreadcrumbHandle = {
+  breadcrumb?: (match?: UIMatch) => string | ReactNode
+  breadcrumbs?: (match?: UIMatch) => BreadcrumbItem[]
+}
+
 const Breadcrumbs = () => {
   const matches = useMatches() as unknown as UIMatch<
     unknown,
-    {
-      breadcrumb?: (match?: UIMatch) => string | ReactNode
-    }
+    BreadcrumbHandle
   >[]
 
-  const crumbs = matches
-    .filter((match) => match.handle?.breadcrumb)
-    .map((match) => {
-      const handle = match.handle
+  const crumbs = matches.flatMap((match) => {
+    const handle = match.handle
+    if (!handle) return []
 
-      let label: string | ReactNode | undefined = undefined
-
+    if (handle.breadcrumbs) {
       try {
-        label = handle.breadcrumb?.(match)
-      } catch (error) {
+        const items = handle.breadcrumbs(match)
+        if (Array.isArray(items) && items.length > 0) return items
+      } catch {
         // noop
       }
+      return []
+    }
 
-      if (!label) {
-        return null
+    if (handle.breadcrumb) {
+      try {
+        const label = handle.breadcrumb(match)
+        if (!label) return []
+        return [{ label, path: match.pathname }]
+      } catch {
+        // noop
       }
+    }
 
-      return {
-        label: label,
-        path: match.pathname,
-      }
-    })
-    .filter(Boolean) as { label: string | ReactNode; path: string }[]
+    return []
+  })
 
   return (
     <ol

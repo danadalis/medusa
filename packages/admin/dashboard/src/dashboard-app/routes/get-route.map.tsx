@@ -251,7 +251,7 @@ export function getRouteMap({
                 {
                   path: ":id",
                   lazy: async () => {
-                    const { Component, Breadcrumb, loader } = await import(
+                    const { Component, breadcrumbs, loader } = await import(
                       "../../routes/categories/category-detail"
                     )
 
@@ -259,9 +259,9 @@ export function getRouteMap({
                       Component,
                       loader,
                       handle: {
-                        breadcrumb: (
+                        breadcrumbs: (
                           match: UIMatch<HttpTypes.AdminProductCategoryResponse>
-                        ) => <Breadcrumb {...match} />,
+                        ) => breadcrumbs(match),
                       },
                     }
                   },
